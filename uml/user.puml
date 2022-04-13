@@ -1,0 +1,9 @@
+@startuml
+class User {
+    id: integer
+    name: text
+    email: text
+    created_date: text
+    updated_date: text
+}
+@enduml
