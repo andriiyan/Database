@@ -1,0 +1,11 @@
+@startuml
+class Ticket {
+id: integer
+event_id: integer
+user_id: integer
+category: text
+place: integer
+created_date: text
+updated_date: text
+}
+@enduml
