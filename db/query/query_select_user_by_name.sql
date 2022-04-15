@@ -1,0 +1,1 @@
+SELECT * FROM public."user" WHERE "name" LIKE 'name 1050'
