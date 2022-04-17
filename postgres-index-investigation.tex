@@ -102,14 +102,3 @@ not very efficient.
 Taking look on the size which indexes are taking, \textbf{hash} is on the figure and on the \textbf{b-tree} figure,
 \textbf{hash} index takes more size than \textbf{b-tree}, but taking a look at the efficient comparing tables
 \textbf{hash} is more-more efficient in case of \texttt{character varying} indexes.
-
-
-Trigger function
-
-
-
-CREATE TRIGGER set_update_time_on_update
-BEFORE UPDATE OF id, name, email, created_date, updated_date
-ON public."user"
-FOR EACH ROW
-EXECUTE FUNCTION public.set_update_time();
