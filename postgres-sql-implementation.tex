@@ -74,7 +74,7 @@
     \label{fig:db_relations}
 \end{figure}
 
-\subsection{Trigger for update time on UPDATE}\label{subsec:trigger}
+\subsection{Trigger for update time on UPDATE}\label{subsec:trigger-update-time}
 
 Trigger function looks like:
 
@@ -102,3 +102,63 @@ Trigger looks like:
     EXECUTE FUNCTION public.set\_update\_time(); \\
 }
 
+\subsection{Trigger for name validation}\label{subsec:trigger-name-validation}
+
+Function to validate name:
+
+\texttt{
+    CREATE FUNCTION public.name\_validation()\\
+    RETURNS trigger\\
+    LANGUAGE 'plpgsql'\\
+    VOLATILE NOT LEAKPROOF\\
+    AS \$BODY\$\\
+    BEGIN\\
+    if NEW.name LIKE '\%\@\%' THEN\\
+        RAISE EXCEPTION 'name field contains \@ character';\\
+    ELSEIF NEW.name LIKE '\%\#\%' THEN\\
+        RAISE EXCEPTION 'name field contains \# character';\\
+    ELSEIF NEW.name LIKE '\%\$\%' THEN\\
+        RAISE EXCEPTION 'name field contains \# character';\\
+    END IF;\\
+    RETURN NEW;\\
+    END;\\
+    \$BODY\$;\\
+}
+
+Trigger that invokes BEFORE each update or insert on the \texttt{user.name} field:
+
+\texttt{
+    ALTER FUNCTION public.name\_validation() \\
+    OWNER TO postgres; \\
+    \\
+    CREATE TRIGGER validate\_name \\
+    BEFORE INSERT OR UPDATE OF name \\
+    ON public."user" \\
+    FOR EACH ROW \\
+    EXECUTE FUNCTION public.name\_validation(); \\
+}
+
+Trigger in action:
+\begin{center}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[]{images/validation_1}
+        \caption{Trigger raises an exception when user name contains \#}
+        \label{fig:db_validation_1}
+    \end{figure}
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[]{images/validation_2}
+        \caption{Trigger raises an exception when user name contains \@}
+        \label{fig:db_validation_3}
+    \end{figure}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[]{images/validation_dollar}
+        \caption{Trigger raises an exception when user name contains \$}
+        \label{fig:db_validation_2}
+    \end{figure}
+\end{center}
+
+\clearpage
