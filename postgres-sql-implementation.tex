@@ -73,32 +73,3 @@
     \caption{Entities relation in the database}
     \label{fig:db_relations}
 \end{figure}
-
-\subsection{Trigger for update time on UPDATE}\label{subsec:trigger}
-
-Trigger function looks like:
-
-\texttt{
-    CREATE OR REPLACE FUNCTION public.set_update_time() \\
-    RETURNS trigger \\
-    LANGUAGE 'plpgsql' \\
-    VOLATILE \\
-    COST 100 \\
-    AS $BODY$ \\
-    BEGIN \\
-    new.updated\_time = CURRENT\_TIME(2); \\
-    RETURN new; \\
-    END; \\
-    $BODY$; \\
-}
-
-Trigger looks like:
-
-\texttt{
-    CREATE TRIGGER set\_update\_time\_on\_update \\
-    BEFORE UPDATE OF id, name, email, created\_date, updated\_date \\
-    ON public."user" \\
-    FOR EACH ROW \\
-    EXECUTE FUNCTION public.set\_update\_time(); \\
-}
-
