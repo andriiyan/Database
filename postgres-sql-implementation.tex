@@ -114,11 +114,11 @@ Function to validate name:
     AS \$BODY\$\\
     BEGIN\\
     if NEW.name LIKE '\%\@\%' THEN\\
-        RAISE EXCEPTION 'name field contains \@ character';\\
+    RAISE EXCEPTION 'name field contains \@ character';\\
     ELSEIF NEW.name LIKE '\%\#\%' THEN\\
-        RAISE EXCEPTION 'name field contains \# character';\\
+    RAISE EXCEPTION 'name field contains \# character';\\
     ELSEIF NEW.name LIKE '\%\$\%' THEN\\
-        RAISE EXCEPTION 'name field contains \# character';\\
+    RAISE EXCEPTION 'name field contains \# character';\\
     END IF;\\
     RETURN NEW;\\
     END;\\
@@ -160,5 +160,47 @@ Trigger in action:
         \label{fig:db_validation_2}
     \end{figure}
 \end{center}
+
+\clearpage
+
+\subsection{Function to return user's average place}\label{subsec:function-to-return-user's-average-place}
+
+\texttt{
+    CREATE OR REPLACE FUNCTION public.avarage\_user\_ticket\_place(IN "user" "user") \\
+    RETURNS integer \\
+    LANGUAGE 'sql' \\
+    IMMUTABLE \\
+    PARALLEL UNSAFE \\
+    COST 100 \\
+    \\
+    \\
+    RETURN (SELECT AVG(ticket.place) FROM ticket WHERE ticket.user\_id = "user".id); \\
+}
+
+\subsection{Create a function that will return an average user name length for the event by event's name}\label{subsec:select-avarage-user-name-for-the-event-by-event's-name}
+
+\texttt{
+    CREATE FUNCTION public.avarage\_users\_name\_length\_for\_event(IN event\_name character varying) \\
+    RETURNS numeric \\
+    LANGUAGE 'sql' \\
+    \\
+    \\
+    RETURN (SELECT AVG(length) FROM (SELECT LENGTH("name") FROM ( \\
+    SELECT DISTINCT "user".name as "name" FROM "event" \\
+    INNER JOIN ticket ON ticket.event\_id = "event".id \\
+    INNER JOIN "user" ON "user".id = ticket.user\_id \\
+    WHERE "event".title LIKE event\_name \\
+    ) as select\_user\_names) as select\_length); \\
+    \\
+    ALTER FUNCTION public.avarage\_users\_name\_length\_for\_event(character varying) \\
+    OWNER TO postgres; \\
+}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[]{images/avarage_user_name_event}
+    \caption{Select average user name for the event by event's name}
+    \label{fig:db_average_user_name_length}
+\end{figure}
 
 \clearpage
