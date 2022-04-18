@@ -204,3 +204,26 @@ Trigger in action:
 \end{figure}
 
 \clearpage
+
+\subsection{Create a function that will return users that have more than 5 tickets}\label{subsec:create-a-function-that-will-return-users-that-have-more-than-5-tickets}
+
+\texttt{
+    CREATE FUNCTION public.select\_users\_which\_have\_more\_then\_5\_tickets() \\
+    RETURNS SETOF "user" \\
+    LANGUAGE 'plpgsql' \\
+    IMMUTABLE \\
+    AS \$BODY\$ \\
+    BEGIN\\
+    RETURN QUERY (\\
+    SELECT "user".* FROM ticket\\
+    INNER JOIN "user" on "user".id = ticket.user\_id\\
+    WHERE ticket.id IS NOT NULL\\
+    GROUP BY "user".id\\
+    HAVING COUNT(*) > 5\\
+    );\\
+    END;\\
+    \$BODY\$;\\
+    \\
+    ALTER FUNCTION public.select\_users\_which\_have\_more\_then\_5\_tickets()\\
+    OWNER TO postgres;\\
+}
