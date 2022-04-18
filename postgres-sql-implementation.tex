@@ -114,11 +114,11 @@ Function to validate name:
     AS \$BODY\$\\
     BEGIN\\
     if NEW.name LIKE '\%\@\%' THEN\\
-        RAISE EXCEPTION 'name field contains \@ character';\\
+    RAISE EXCEPTION 'name field contains \@ character';\\
     ELSEIF NEW.name LIKE '\%\#\%' THEN\\
-        RAISE EXCEPTION 'name field contains \# character';\\
+    RAISE EXCEPTION 'name field contains \# character';\\
     ELSEIF NEW.name LIKE '\%\$\%' THEN\\
-        RAISE EXCEPTION 'name field contains \# character';\\
+    RAISE EXCEPTION 'name field contains \# character';\\
     END IF;\\
     RETURN NEW;\\
     END;\\
@@ -162,3 +162,17 @@ Trigger in action:
 \end{center}
 
 \clearpage
+
+\subsection{Function to return user's average place}\label{subsec:function-to-return-user's-average-place}
+
+\texttt{
+    CREATE OR REPLACE FUNCTION public.avarage\_user\_ticket\_place(IN "user" "user") \\
+    RETURNS integer \\
+    LANGUAGE 'sql' \\
+    IMMUTABLE \\
+    PARALLEL UNSAFE \\
+    COST 100 \\
+    \\
+    \\
+    RETURN (SELECT AVG(ticket.place) FROM ticket WHERE ticket.user\_id = "user".id); \\
+}
