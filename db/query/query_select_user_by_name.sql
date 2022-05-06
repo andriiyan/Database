@@ -1,1 +1,1 @@
-SELECT * FROM public."user" WHERE "name" LIKE 'name 1050'
+SELECT * FROM public."user" WHERE "name" = 'name 1050'
