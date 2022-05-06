@@ -1,0 +1,8 @@
+.idea
+out
+auxil
+database-csv-generator/.gradle
+database-csv-generator/build
+db/event-test.csv
+db/ticket-test.csv
+db/users-test.csv

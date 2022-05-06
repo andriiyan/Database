@@ -1,0 +1,38 @@
+%! Author = Andrii_Yanechko
+%! Date = 3/31/2022
+
+% Preamble
+\title{Design of the database}
+\author{Andrii Yanechko}
+\date{March 2022}
+\documentclass[10pt]{article}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{multirow}
+
+\newcommand\myfontsize{\fontsize{24}{24}\selectfont}
+\definecolor{SecondaryKeyColor}{RGB}{66, 142, 60}
+
+% Document
+\begin{document}
+    \maketitle
+    \newpage
+
+    \section{Program Description}\label{sec:program-description}
+    This is a database for ordering a ticket on the events.
+
+    \section{Design database for CDP program}\label{sec:database-design}
+    \input{design-database-for-cdp-program}
+
+    \section{Implementation of the database design in the PostgresSQL}\label{sec:posgresql-implementation}
+    \input{postgres-sql-implementation.tex}
+
+    \section{PostgresSQL index comparation}\label{sec:posgresql-index-comparation}
+    \input{postgres-index-investigation.tex}
+
+\end{document}

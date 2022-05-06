@@ -1,0 +1,1 @@
+SELECT * FROM public."user" WHERE email LIKE '%17@%'
